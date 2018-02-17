@@ -7,7 +7,7 @@
     tools:context="com.demo.situations.LogInPage">
 
     <Button
-        android:id="@+id/googleSignin"
+        android:id="@+id/googlesigninButton"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="193dp"
