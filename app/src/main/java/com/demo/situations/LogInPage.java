@@ -37,7 +37,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
     Button signinbutton, signupbutton, googlesigninButton;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private Intent main_activity;
+    private Intent main_activity, createSituations;
     GoogleSignInOptions gso;
     final private int RC_SIGN_IN = 9001;
     @Override
@@ -61,6 +61,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
         googlesigninButton.setOnClickListener(this);
 
         main_activity = new Intent(this,MainActivity.class);
+        createSituations = new Intent(this,CreateSituations.class);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
         super.onStart();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(this,MainActivity.class));
+            startActivity(createSituations);
         }
     }
 
@@ -103,7 +104,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            startActivity(main_activity);
+                            startActivity(createSituations);
                         }
                         else{
                             ThrowException(task.getException());
@@ -171,7 +172,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             currentUser = mAuth.getCurrentUser();
-                            startActivity(main_activity);
+                            startActivity(createSituations);
                         } else {
                             ThrowException(task.getException());
                         }
