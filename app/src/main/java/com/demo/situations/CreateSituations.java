@@ -1,5 +1,7 @@
 package com.demo.situations;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -73,7 +76,7 @@ public class CreateSituations extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        /*switch(item.getItemId()){
             case R.id.nav_drawer_menu_item_home:
                 Toast.makeText(this,"Home",Toast.LENGTH_SHORT).show();
                 break;
@@ -87,7 +90,7 @@ public class CreateSituations extends AppCompatActivity implements NavigationVie
                     client.signOut();
                 startActivity(new Intent(this,LogInPage.class));
                 break;
-        }
+        }*/
 
 
         return true;

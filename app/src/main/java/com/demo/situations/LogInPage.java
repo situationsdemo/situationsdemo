@@ -69,7 +69,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
         super.onStart();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(createSituations);
+            startActivity(main_activity);
         }
     }
 
@@ -104,7 +104,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            startActivity(createSituations);
+                            startActivity(main_activity);
                         }
                         else{
                             ThrowException(task.getException());
@@ -172,7 +172,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             currentUser = mAuth.getCurrentUser();
-                            startActivity(createSituations);
+                            startActivity(main_activity);
                         } else {
                             ThrowException(task.getException());
                         }
