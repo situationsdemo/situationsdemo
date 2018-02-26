@@ -60,7 +60,7 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
         signupbutton.setOnClickListener(this);
         googlesigninButton.setOnClickListener(this);
 
-        main_activity = new Intent(this,Main2Activity.class);
+        main_activity = new Intent(this,MainActivity.class);
     }
 
     @Override

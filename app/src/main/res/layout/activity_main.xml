@@ -2,40 +2,31 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.demo.situations.MainActivity">
+    tools:context="com.demo.situations.MainActivity"
+    tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="255dp"
-        android:layout_height="29dp"
-        android:layout_marginBottom="21dp"
-        android:layout_marginEnd="78dp"
-        android:layout_marginStart="78dp"
-        android:layout_marginTop="287dp"
-        android:text="@string/congrats_you_re_signed_in"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+    <FrameLayout
+        android:id="@+id/fragmentContent"
+        android:layout_width="0dp"
+        android:layout_height="547dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="120dp"
+    </FrameLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="218dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="21dp"
-        android:text="@string/logout"
-        android:textAllCaps="false"
-        android:textStyle="bold"
+        android:layout_marginBottom="1dp"
+        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:menu="@menu/navigation" />
+
 </android.support.constraint.ConstraintLayout>

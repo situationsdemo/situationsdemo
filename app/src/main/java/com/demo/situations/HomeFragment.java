@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.createSituation:
-                Intent mainActivity = new Intent(getActivity(),MainActivity.class);
+                Intent mainActivity = new Intent(getActivity(),CreateSituation.class);
                 startActivity(mainActivity);
                 break;
         }

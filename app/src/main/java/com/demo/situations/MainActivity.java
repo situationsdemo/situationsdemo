@@ -1,60 +1,63 @@
 package com.demo.situations;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    FirebaseAuth mAuth;
-    Button logoutButton;
-    GoogleSignInOptions gso;
+public class MainActivity extends AppCompatActivity
+        implements HomeFragment.OnFragmentInteractionListener
+                  ,UserAccountFragment.OnFragmentInteractionListener
+                  ,BottomNavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(this);
-        mAuth = FirebaseAuth.getInstance();
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
 
+        LoadFragment(new HomeFragment().newInstance("",""));
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri){
+
+    }
+
+    public boolean LoadFragment(android.support.v4.app.Fragment fragment){
+        if(fragment != null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContent,fragment)
+                    .commit();
+            return(true);
+        }
+        return(false);
     }
 
 
     @Override
-    public void onClick(View view) {
-        switch(view.getId())
-        {
-            case R.id.logoutButton:
-                LogOut();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        android.support.v4.app.Fragment fragment = null;
+        switch(item.getItemId()){
+            case R.id.navigation_home:
+                fragment = new HomeFragment().newInstance("","");
+                break;
+            case R.id.navigation_account:
+                fragment = new UserAccountFragment().newInstance("","");
                 break;
         }
-    }
-
-    private void LogOut(){
-        mAuth.signOut();
-        GoogleSignInClient client = GoogleSignIn.getClient(this,gso);
-        if(client != null)
-            client.signOut();
-        startActivity(new Intent(this,LogInPage.class));
+        return(LoadFragment(fragment));
     }
 }
