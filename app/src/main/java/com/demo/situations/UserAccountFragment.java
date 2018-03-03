@@ -1,12 +1,19 @@
 package com.demo.situations;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
@@ -17,7 +24,7 @@ import android.view.ViewGroup;
  * Use the {@link UserAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserAccountFragment extends Fragment {
+public class UserAccountFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -26,6 +33,10 @@ public class UserAccountFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    FirebaseAuth mAuth;
+    Button logoutButton;
+    GoogleSignInOptions gso;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,13 +69,23 @@ public class UserAccountFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+         View view = inflater.inflate(R.layout.fragment_user_account, container, false);
+        logoutButton = view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(this);
+        mAuth = FirebaseAuth.getInstance();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_account, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +110,24 @@ public class UserAccountFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId())
+        {
+            case R.id.logoutButton:
+                LogOut();
+                break;
+        }
+    }
+
+    private void LogOut(){
+        mAuth.signOut();
+        GoogleSignInClient client = GoogleSignIn.getClient(getActivity(),gso);
+        if(client != null)
+            client.signOut();
+        startActivity(new Intent(getActivity(),LogInPage.class));
     }
 
     /**
