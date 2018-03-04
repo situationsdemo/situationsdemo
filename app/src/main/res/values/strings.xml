@@ -19,4 +19,16 @@
     <string name="account">Account</string>
     <string name="home">Home</string>
     <string name="useraccount">User Account</string>
+    <string name="selectsituation">Select a Situation</string>
+    <string-array name="planets_array">
+        <item>Select a Category</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

@@ -1,5 +1,6 @@
 package com.demo.situations;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -178,8 +179,8 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
                     }
                 });
     }
-    private void ShowAlert(String msg){
-        AlertDialog.Builder myAlert = new AlertDialog.Builder(this)
+    public static void ShowAlert(Context context, String msg){
+        AlertDialog.Builder myAlert = new AlertDialog.Builder(context)
                 .setMessage(msg)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -196,19 +197,19 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
             throw exception;
         }
         catch (FirebaseNetworkException e){
-            ShowAlert("No Network!");
+            ShowAlert(this,"No Network!");
         }
         catch (FirebaseAuthInvalidUserException e){
-            ShowAlert("Account with this email doesn't exist!");
+            ShowAlert(this,"Account with this email doesn't exist!");
         }
         catch (FirebaseAuthInvalidCredentialsException e){
-            ShowAlert("the password is invalid");
+            ShowAlert(this,"the password is invalid");
         }
         catch (FirebaseAuthUserCollisionException e){
-            ShowAlert("Email already in use.");
+            ShowAlert(this,"Email already in use.");
         }
         catch (FirebaseException e){
-            ShowAlert(e.getMessage());
+            ShowAlert(this,e.getMessage());
         }
         catch (Exception e){
 
