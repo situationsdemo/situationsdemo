@@ -1,5 +1,6 @@
 package com.demo.situations;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -8,9 +9,11 @@ import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -51,17 +54,29 @@ public class CreateSituation extends AppCompatActivity
 
     private Spinner spinnerCategory;
     private Spinner spinnerSubCategory;
+    private Button selectSituation;
+    private Button videoButton;
     private ArrayAdapter<String> categoryAdaptor;
     private ArrayAdapter<String> subCategoryAdaptor;
     private VideoView situationPreview;
-    private Uri uri;
     private DatabaseReference databaseReference;
-    private StorageReference storageReference;
     private DataSnapshot categorySnapShot;
+    private Intent selectSituations;
+    private Toolbar toolbar;
+    private boolean videoUrlSet = false;
+    private final int RESULT_SELECT_SITUATION = 33;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_situation);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        videoButton = findViewById(R.id.videoButton);
+        videoButton.setOnClickListener(this);
+        selectSituation = findViewById(R.id.buttonSelectSituation);
+        selectSituation.setOnClickListener(this);
+        selectSituation.setVisibility(View.INVISIBLE);
 
         spinnerCategory = findViewById(R.id.spinnerCategory);
         spinnerSubCategory = findViewById(R.id.spinnerSubCategory);
@@ -72,42 +87,57 @@ public class CreateSituation extends AppCompatActivity
         situationPreview = findViewById(R.id.situationPreview);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("Situations").child("Category").addListenerForSingleValueEvent(this);
-        storageReference = FirebaseStorage.getInstance().getReference();
+        //storageReference = FirebaseStorage.getInstance().getReference();
 
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
-
-        storageReference.child("anim.mp4").getDownloadUrl().addOnSuccessListener(this, new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //uri = Uri.parse("gs://situations-31ca4.appspot.com/anim.mp4");
-                situationPreview.setVideoURI(uri);
-                situationPreview.requestFocus();
-                situationPreview.start();
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                LogInPage.ShowAlert(CreateSituation.this,e.getMessage());
-            }
-        });
-
+        selectSituations = new Intent(this, com.demo.situations.selectSituations.class);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
 
 
     }
-
 
     @Override
     public void onClick(View view) {
         switch(view.getId())
         {
-            case R.id.logoutButton:
-
+            case R.id.buttonSelectSituation:
+                situationPreview.stopPlayback();
+                startActivityForResult(selectSituations,RESULT_SELECT_SITUATION);
+                break;
+            case R.id.videoButton:
+                if(situationPreview.isPlaying()){
+                    situationPreview.pause();
+                }
+                else{
+                    situationPreview.start();
+                }
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == RESULT_SELECT_SITUATION){
+            if(resultCode == RESULT_OK){
+                String url = data.getStringExtra("selectedSituation");
+                Uri videoUri = Uri.parse(url);
+                situationPreview.setVideoURI(videoUri);
+                situationPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        situationPreview.seekTo(1);
+                    }
+                });
+                videoUrlSet = true;
+                situationPreview.start();
+            }
+            else{
+                if(videoUrlSet == true){
+                    situationPreview.start();
+                }
+            }
+        }
+    }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,7 +178,7 @@ public class CreateSituation extends AppCompatActivity
                         String child = adapterView.getItemAtPosition(i).toString();
                         DataSnapshot subSnapShot = categorySnapShot.child(child);
                         for (DataSnapshot snapshot : subSnapShot.getChildren()) {
-                            subCategories.add(snapshot.getValue(String.class));
+                            subCategories.add(snapshot.getValue().toString());
                         }
                         subCategoryAdaptor = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,subCategories);
                         subCategoryAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -164,9 +194,11 @@ public class CreateSituation extends AppCompatActivity
             case R.id.spinnerSubCategory:
                 if(i > 0){
                     textView.setTextColor(Color.BLACK);
+                    selectSituation.setVisibility(View.VISIBLE);
                 }
                 else{
                     textView.setTextColor(Color.GRAY);
+                    selectSituation.setVisibility(View.INVISIBLE);
                 }
                 break;
         }
