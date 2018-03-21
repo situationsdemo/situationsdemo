@@ -3,19 +3,12 @@ package com.demo.situations;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toolbar;
 
-import com.google.android.gms.common.data.DataBufferObserverSet;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +16,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -33,36 +25,52 @@ public class selectSituations extends AppCompatActivity implements ValueEventLis
     private VideoViewAdapater videoViewAdapater;
     private GridVideoView selectedVideo;
     private String selectedVideoUrl;
+    private MenuItem doneCheckmark;
     private android.support.v7.widget.Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_situations);
         GridView gridView = findViewById(R.id.gridview);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         dataUrls = new ArrayList<>();
         videoViewAdapater = new VideoViewAdapater(this,dataUrls);
         videoViewAdapater.setOnItemSelectedListener(new onItemSelectedListener() {
             @Override
             public void getItemSelected(GridVideoView videoView, String VideoUrl) {
+                doneCheckmark.setEnabled(true);
+                doneCheckmark.getIcon().setAlpha(255);//enable done checkmark
                 selectedVideo = videoView;
                 selectedVideoUrl = VideoUrl;
             }
         });
         gridView.setAdapter(videoViewAdapater);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("SelectSituations");
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("Situations").child("Category").child("test").child("videos").addListenerForSingleValueEvent(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24px);
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.nav_drawer_menu,menu);
+        getMenuInflater().inflate(R.menu.done_checkmark,menu);
+
         return super.onCreateOptionsMenu(menu);
 
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        doneCheckmark = menu.findItem(R.id.done);
+        doneCheckmark.setEnabled(false);
+        doneCheckmark.getIcon().setAlpha(130);//disable done checkmark
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

@@ -12,20 +12,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.OnFragmentInteractionListener
                   ,UserAccountFragment.OnFragmentInteractionListener
                   ,BottomNavigationView.OnNavigationItemSelectedListener{
 
+    private android.support.v7.widget.Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
+        getSupportActionBar().setTitle("Main Activity");
         LoadFragment(new HomeFragment().newInstance("",""));
     }
 

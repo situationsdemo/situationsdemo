@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
+<menu
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/done"
-        android:title="@string/done"
+        android:id="@+id/next"
+        android:icon="@drawable/ic_arrow_forward_white_24px"
         app:showAsAction="always"
-        >
-
-    </item>
-
+        android:title=""/>
 </menu>

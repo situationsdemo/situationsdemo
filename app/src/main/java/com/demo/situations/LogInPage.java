@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,12 +40,17 @@ public class LogInPage extends AppCompatActivity implements View.OnClickListener
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private Intent main_activity, createSituations;
+    private Toolbar toolbar;
     GoogleSignInOptions gso;
     final private int RC_SIGN_IN = 9001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_page);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("LogInPage");
         mAuth = FirebaseAuth.getInstance();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

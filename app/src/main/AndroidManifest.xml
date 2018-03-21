@@ -23,9 +23,9 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"/>
-        <activity
-            android:name=".selectSituations" />
+            android:label="@string/title_activity_main" />
+        <activity android:name=".selectSituations" />
+        <activity android:name=".AddMusic"></activity>
     </application>
 
 </manifest>

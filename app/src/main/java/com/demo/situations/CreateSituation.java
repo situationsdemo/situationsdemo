@@ -63,6 +63,8 @@ public class CreateSituation extends AppCompatActivity
     private DataSnapshot categorySnapShot;
     private Intent selectSituations;
     private Toolbar toolbar;
+    private MenuItem goNextArrow;
+    private String UrlForSelectedSituation;
     private boolean videoUrlSet = false;
     private final int RESULT_SELECT_SITUATION = 33;
     @Override
@@ -72,6 +74,7 @@ public class CreateSituation extends AppCompatActivity
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("CreateSituation");
         videoButton = findViewById(R.id.videoButton);
         videoButton.setOnClickListener(this);
         selectSituation = findViewById(R.id.buttonSelectSituation);
@@ -90,10 +93,38 @@ public class CreateSituation extends AppCompatActivity
         //storageReference = FirebaseStorage.getInstance().getReference();
 
         selectSituations = new Intent(this, com.demo.situations.selectSituations.class);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24px);
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.go_next_arrow,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        goNextArrow = menu.findItem(R.id.next);
+        goNextArrow.setEnabled(false);
+        goNextArrow.getIcon().setAlpha(130);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.next:
+                Intent musicactivityIntent = new Intent(this,AddMusic.class);
+                if(UrlForSelectedSituation != null){
+                    musicactivityIntent.putExtra("selectedSituation",UrlForSelectedSituation);
+                    startActivity(musicactivityIntent);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -120,6 +151,7 @@ public class CreateSituation extends AppCompatActivity
         if(requestCode == RESULT_SELECT_SITUATION){
             if(resultCode == RESULT_OK){
                 String url = data.getStringExtra("selectedSituation");
+                UrlForSelectedSituation = url;
                 Uri videoUri = Uri.parse(url);
                 situationPreview.setVideoURI(videoUri);
                 situationPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -130,6 +162,8 @@ public class CreateSituation extends AppCompatActivity
                 });
                 videoUrlSet = true;
                 situationPreview.start();
+                goNextArrow.setEnabled(true);
+                goNextArrow.getIcon().setAlpha(255);
             }
             else{
                 if(videoUrlSet == true){
