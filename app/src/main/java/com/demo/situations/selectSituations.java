@@ -87,10 +87,6 @@ public class selectSituations extends AppCompatActivity implements ValueEventLis
                 }
                 finish();
                 break;
-            case R.id.homeAsUp:
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -103,13 +99,6 @@ public class selectSituations extends AppCompatActivity implements ValueEventLis
         return super.onSupportNavigateUp();
     }
 
-    @Override
-    public boolean onNavigateUp() {
-        Intent intent = new Intent();
-        setResult(Activity.RESULT_CANCELED);
-        finish();
-        return super.onNavigateUp();
-    }
 
     public void addUrl(String child){
         FirebaseStorage.getInstance().getReference().child(child).getDownloadUrl().addOnSuccessListener(this, new OnSuccessListener<Uri>() {

@@ -120,7 +120,7 @@ public class CreateSituation extends AppCompatActivity
                 Intent musicactivityIntent = new Intent(this,AddMusic.class);
                 if(UrlForSelectedSituation != null){
                     musicactivityIntent.putExtra("selectedSituation",UrlForSelectedSituation);
-                    startActivity(musicactivityIntent);
+                    startActivityForResult(musicactivityIntent,23);
                 }
                 break;
         }
